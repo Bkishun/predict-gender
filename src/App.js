@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Axios from 'axios'
+import "./App.css";
+import { useEffect, useState } from 'react'
 
-function App() {
-  return (
+export default function App() {
+    const [name, setName]= useState("");
+    const [finalName, setFinalName]= useState("");
+    const[PredictedGender, setpredictGender]=useState("non");
+    const fetchData=()=>{
+        Axios.get(`https://api.genderize.io/?name=${name}`).then((res)=>{
+            setpredictGender(res.data.gender);
+        })
+        afinalName();
+    };
+    const afinalName =()=>{
+      setFinalName(name);
+    }
+   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
+      <div className='container'>
+        <input className="input" placeholder='Enter firstName..' onChange={(event) => {setName(event.target.value)}}/>
+        <button className='button' onClick={fetchData}>Predict Gender</button>
+      </div>
+      <div className='container'>
+        <h1 className='result'>Name : {finalName}</h1>
+        <h1 className='result'>Predicted Gender : {PredictedGender}</h1>
+      </div>  
+    </div>
+  )
+}
